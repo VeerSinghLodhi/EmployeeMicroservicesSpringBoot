@@ -1,0 +1,35 @@
+package com.example.controller;
+
+import com.example.dto.EmployeeRequest;
+import com.example.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/employee")
+public class EmployeeController {
+
+    @Autowired
+    EmployeeService employeeService;
+
+    @PostMapping("/add")
+    public ResponseEntity<?>addEmployee(@RequestBody EmployeeRequest request){
+        return ResponseEntity.ok(employeeService.addEmployee(request));
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?>getEmployeeById(@PathVariable Long id){
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
+    }
+
+    @GetMapping("/get/all")
+    public ResponseEntity<?>getAllEmployees(){
+        return ResponseEntity.ok(employeeService.getEmployees());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?>deleteEmployee(@PathVariable Long id){
+        return ResponseEntity.ok(employeeService.deleteEmployee(id));
+    }
+}
