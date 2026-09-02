@@ -21,8 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto addEmployee(EmployeeRequest request) {
-        Employee employee= new Employee();
-        employee.setName(request.getName());
+        Employee employee= EmployeeMapper.toEntity(request);
         EmployeeDto savedEmp = EmployeeMapper.toDto(employeeRepository.save(employee));
         return savedEmp;
     }
