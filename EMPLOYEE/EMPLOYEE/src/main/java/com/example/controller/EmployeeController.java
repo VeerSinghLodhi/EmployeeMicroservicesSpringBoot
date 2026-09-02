@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employees")
 public class EmployeeController {
 
     @Autowired
@@ -28,8 +28,15 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployees());
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?>getUpdateEmployee(@PathVariable Long id,@RequestBody EmployeeRequest employeeRequest){
+        return ResponseEntity.ok(employeeService.updateEmployee(id,employeeRequest));
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?>deleteEmployee(@PathVariable Long id){
         return ResponseEntity.ok(employeeService.deleteEmployee(id));
     }
+
+
 }

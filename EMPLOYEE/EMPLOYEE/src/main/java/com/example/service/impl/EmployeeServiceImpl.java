@@ -40,6 +40,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public EmployeeDto updateEmployee(Long id, EmployeeRequest updateRequest) {
+        if(id == null)
+            throw new BadRequestException("Employee id must not be null");
+        Employee employee = employeeRepository.findById(id).orElseThrow(
+                ()->new ResourceNotFoundException("Employee not found with id: "+id)
+        );
+        employee.setEmpName(updateRequest.getEmpName());
+        employee.setEmpCode(updateRequest.getEmpCode());
+        employee.setEmpPhone(updateRequest.getEmpPhone());
+        employee.setCompanyName(updateRequest.getCompanyName());
+
+        return EmployeeMapper.toDto(employeeRepository.save(employee));
+    }
+
+    @Override
     public List<EmployeeDto> getEmployees() {
         List<Employee>employees=employeeRepository.findAll();
         return employees.stream().map(EmployeeMapper::toDto).toList();
