@@ -13,7 +13,7 @@ public interface AddressService {
 
     AddressDto getAddressById(Long id);
 
-    List<AddressDto>getAllAddress();
+    List<AddressDto>getAllAddress(Long id);
 
     String deleteAddress(Long id);
 }

@@ -30,9 +30,9 @@ public class AddressController {
         return new ResponseEntity<>(addressService.getAddressById(addressId), HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?>getAllAddress(){
-        return new ResponseEntity<>(addressService.getAllAddress(), HttpStatus.CREATED);
+    @GetMapping("/all/{id}")
+    public ResponseEntity<?>getAllAddress(@PathVariable Long id){
+        return new ResponseEntity<>(addressService.getAllAddress(id), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{addressId}")

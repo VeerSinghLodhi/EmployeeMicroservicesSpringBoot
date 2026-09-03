@@ -1,5 +1,10 @@
 package com.example.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeDto {
 
     private Long empId;
@@ -11,6 +16,8 @@ public class EmployeeDto {
     private String empPhone;
 
     private String companyName;
+
+    private List<AddressDto> addressDtoList;
 
     public Long getEmpId() {
         return empId;
@@ -50,5 +57,13 @@ public class EmployeeDto {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public List<AddressDto> getAddressDtoList() {
+        return addressDtoList;
+    }
+
+    public void setAddressDtoList(List<AddressDto> addressDtoList) {
+        this.addressDtoList = addressDtoList;
     }
 }

@@ -72,8 +72,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<AddressDto> getAllAddress() {
-        List<Address> addressList = addressRepository.findAll();
+    public List<AddressDto> getAllAddress(Long id) {
+        List<Address> addressList = addressRepository.findAllByEmpId(id);
+        if(addressList.isEmpty()){
+            throw new ResourceNotFoundException("No address found for employee id: "+id);
+        }
         return addressList.stream().map(AddressMapper::toDto).toList();
     }
 
