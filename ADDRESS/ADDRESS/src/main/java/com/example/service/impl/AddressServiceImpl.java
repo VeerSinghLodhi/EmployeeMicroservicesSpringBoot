@@ -1,8 +1,10 @@
 package com.example.service.impl;
 
+import com.example.client.EmployeeClient;
 import com.example.dto.AddressDto;
 import com.example.dto.AddressRequest;
 import com.example.dto.AddressRequestDto;
+import com.example.dto.EmployeeDto;
 import com.example.entity.Address;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -22,13 +24,22 @@ public class AddressServiceImpl implements AddressService {
 
     Logger log = LoggerFactory.getLogger(AddressServiceImpl.class);
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+    private final EmployeeClient employeeClient;
+
+    public AddressServiceImpl(AddressRepository addressRepository, EmployeeClient employeeClient) {
+        this.addressRepository = addressRepository;
+        this.employeeClient = employeeClient;
+    }
 
     @Override
     public List<AddressDto> addAddress(AddressRequest addressRequest) {
-        // TODO: check if employee exits
-        //addressRequest.getEmpId()
+        // checking if employee exits in other service
+        employeeClient.getEmployeeById(addressRequest.getEmpId());
+//        if(employeeDto==null){
+//            throw new ResourceNotFoundException("Employee not found with id: "+addressRequest.getEmpId());
+//        }
+
         List<Address> listToSave = this.saveOrUpdateAddress(addressRequest);
         List<Address>savedAddress = addressRepository.saveAll(listToSave);
         return savedAddress.stream().map(AddressMapper::toDto).toList();
@@ -36,9 +47,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDto> updateAddress(AddressRequest addressRequest) {
-
-        // TODO: check if employee exits
-        //addressRequest.getEmpId()
+        // checking if employee exits in other service
+        employeeClient.getEmployeeById(addressRequest.getEmpId());
         List<Address> addressList = addressRepository.findAllByEmpId(addressRequest.getEmpId());
         if(addressList.isEmpty()){
             log.info("No address found for employee id {}",addressRequest.getEmpId());
