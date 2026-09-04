@@ -1,0 +1,111 @@
+package com.example.AUTH.service.impl;
+
+import com.example.AUTH.client.EmployeeClient;
+import com.example.AUTH.dto.AddressDto;
+import com.example.AUTH.dto.AddressRequest;
+import com.example.AUTH.dto.AddressRequestDto;
+import com.example.AUTH.entity.Address;
+import com.example.AUTH.exception.BadRequestException;
+import com.example.AUTH.exception.ResourceNotFoundException;
+import com.example.AUTH.mapper.AddressMapper;
+import com.example.AUTH.repository.AddressRepository;
+import com.example.AUTH.service.AddressService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class AddressServiceImpl implements AddressService {
+
+    Logger log = LoggerFactory.getLogger(AddressServiceImpl.class);
+
+    private final AddressRepository addressRepository;
+    private final EmployeeClient employeeClient;
+
+    public AddressServiceImpl(AddressRepository addressRepository, EmployeeClient employeeClient) {
+        this.addressRepository = addressRepository;
+        this.employeeClient = employeeClient;
+    }
+
+    @Override
+    public List<AddressDto> addAddress(AddressRequest addressRequest) {
+        // checking if employee exits in other service
+        employeeClient.getEmployeeById(addressRequest.getEmpId());
+//        if(employeeDto==null){
+//            throw new ResourceNotFoundException("Employee not found with id: "+addressRequest.getEmpId());
+//        }
+
+        List<Address> listToSave = this.saveOrUpdateAddress(addressRequest);
+        List<Address>savedAddress = addressRepository.saveAll(listToSave);
+        return savedAddress.stream().map(AddressMapper::toDto).toList();
+    }
+
+    @Override
+    public List<AddressDto> updateAddress(AddressRequest addressRequest) {
+        // checking if employee exits in other service
+        employeeClient.getEmployeeById(addressRequest.getEmpId());
+        List<Address> addressList = addressRepository.findAllByEmpId(addressRequest.getEmpId());
+        if(addressList.isEmpty()){
+            log.info("No address found for employee id {}",addressRequest.getEmpId());
+            log.info("Creating address for employee id {}",addressRequest.getEmpId());
+        }
+        List<Address> listToUpdate = this.saveOrUpdateAddress(addressRequest);
+        List<Address>updatedAddress = addressRepository.saveAll(listToUpdate);
+        return updatedAddress.stream().map(AddressMapper::toDto).toList();
+    }
+
+    @Override
+    public AddressDto getAddressById(Long id) {
+        if(id==null){
+            throw new BadRequestException("Address must not be null");
+        }
+
+        Address address = addressRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Address not found with id: "+id)
+        );
+        return AddressMapper.toDto(address);
+    }
+
+    @Override
+    public List<AddressDto> getAllAddress(Long id) {
+        List<Address> addressList = addressRepository.findAllByEmpId(id);
+        if(addressList.isEmpty()){
+            throw new ResourceNotFoundException("No address found for employee id: "+id);
+        }
+        return addressList.stream().map(AddressMapper::toDto).toList();
+    }
+
+    @Override
+    public String deleteAddress(Long id) {
+        if(id==null){
+            throw new BadRequestException("Address must not be null");
+        }
+
+        Address address = addressRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Address not found with id: "+id)
+        );
+
+        addressRepository.delete(address);
+        return "Address has been deleted";
+    }
+
+
+    private List<Address> saveOrUpdateAddress(AddressRequest addressRequest){
+        List<Address> listToSave = new ArrayList<>();
+        for(AddressRequestDto addressRequestDto : addressRequest.getAddressRequestDtoList()){
+            Address address = new Address();
+            address.setId(addressRequestDto.getId() != null ? addressRequestDto.getId() : null);
+            address.setStreet(addressRequestDto.getStreet());
+            address.setPicCode(addressRequestDto.getPicCode());
+            address.setCity(addressRequestDto.getCity());
+            address.setCountry(addressRequestDto.getCountry());
+            address.setAddressType(addressRequestDto.getAddressType());
+            address.setEmpId(addressRequest.getEmpId());
+            listToSave.add(address);
+        }
+        return listToSave;
+    }
+}
