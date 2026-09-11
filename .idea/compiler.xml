@@ -7,15 +7,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="EUREKA-SERVER" />
+        <module name="API-GATEWAY" />
         <module name="AUTH" />
         <module name="EMPLOYEE" />
         <module name="ADDRESS" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="API-GATEWAY (1) (com.example)" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ADDRESS" options="-parameters" />
+      <module name="API-GATEWAY" options="-parameters" />
+      <module name="API-GATEWAY (1) (com.example)" options="-parameters" />
       <module name="AUTH" options="-parameters" />
       <module name="EMPLOYEE" options="-parameters" />
       <module name="EUREKA-SERVER" options="-parameters" />
