@@ -77,6 +77,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getEmployees() {
+
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         List<Employee>employees=employeeRepository.findAll();
         List<EmployeeDto> employeeDtos = employees.stream().map(EmployeeMapper::toDto).toList();
         List<EmployeeDto>response = new ArrayList<>();

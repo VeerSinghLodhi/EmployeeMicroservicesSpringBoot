@@ -16,9 +16,8 @@ public class CustomErrorDecoder implements ErrorDecoder{
 
     @Override
     public Exception decode(String s, Response response) {
-
+        System.out.println("Error code is =================> "+response.status());
         ObjectMapper objectMapper=new ObjectMapper();
-//        objectMapper.findAndRegisterModules();
         try {
             InputStream is = response.body().asInputStream();
             ErrorResponse errorResponse = objectMapper.readValue(is, ErrorResponse.class);

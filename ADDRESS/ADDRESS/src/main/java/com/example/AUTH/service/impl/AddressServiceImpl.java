@@ -32,12 +32,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDto> addAddress(AddressRequest addressRequest) {
-        // checking if employee exits in other service
         employeeClient.getEmployeeById(addressRequest.getEmpId());
-//        if(employeeDto==null){
-//            throw new ResourceNotFoundException("Employee not found with id: "+addressRequest.getEmpId());
-//        }
-
         List<Address> listToSave = this.saveOrUpdateAddress(addressRequest);
         List<Address>savedAddress = addressRepository.saveAll(listToSave);
         return savedAddress.stream().map(AddressMapper::toDto).toList();

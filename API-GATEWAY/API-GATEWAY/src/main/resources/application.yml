@@ -22,6 +22,10 @@ spring:
                 - Path=/employees/**
               filters:
                 - AuthFilter
+                - name : CircuitBreaker
+                  args:
+                    name : EMPLOYEE-SERVICE
+                    fallbackUri: forward:/employeeFallback
 
             - id: ADDRESS-SERVICE
               uri: lb://ADDRESS
@@ -29,6 +33,10 @@ spring:
                 - Path=/addresses/**
               filters:
                 - AuthFilter
+                - name : CircuitBreaker
+                  args:
+                    name: ADDRESS-SERVICE
+                    fallbackUri: forward:/addressFallback
 
 eureka:
   instance:
@@ -41,36 +49,44 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 
-#eureka:
-#  instance:
-#    prefer-ip-address: true
-#
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#
-#spring:
-#  cloud:
-#    gateway:
-#      routes:
-#        - id: EMPLOYEE
-#          uri: lb://EMPLOYEE
-#          predicates:
-#            - Path=/employees/**
-#          filters:
-#            - AuthFilter
-#
-#        - id: ADDRESS
-#          uri: lb://ADDRESS
-#          predicates:
-#            - Path=/addresses/**
-#          filters:
-#            - AuthFilter
-#
-#
-#        - id: AUTH
-#          uri: lb://AUTH
-#          predicates:
-#            - Path=/auth/**
+resilience4j:
+  circuitbreaker:
+    instances:
+      EMPLOYEE-SERVICE:
+        timeoutDuration: 5s
+
+      ADDRESS-SERVICE:
+        timeoutDuration: 5s
+
+  circuitbreakers:
+      EMPLOYEE-SERVICE:
+        slidingWindowType: COUNT_BASED
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 6s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+
+      ADDRESS-SERVICE:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 6s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers
+
+  health:
+    circuitbreakers:
+      enabled: true
