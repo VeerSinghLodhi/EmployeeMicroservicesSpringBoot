@@ -5,23 +5,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends com.commonlib.exception.GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse>handleResourceNotFoundException(ResourceNotFoundException ex){
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),ex.getStatus());
-        return new ResponseEntity<>(errorResponse,ex.getStatus());
-    }
-
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse>handleCustomExceptionException(CustomException ex){
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),ex.getStatus());
-        return new ResponseEntity<>(errorResponse,ex.getStatus());
-    }
-
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponse>handleBadRequestException(BadRequestException ex){
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),ex.getStatus());
-        return new ResponseEntity<>(errorResponse,ex.getStatus());
-    }
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorResponse>handleResourceNotFoundException(ResourceNotFoundException ex){
+//        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),ex.getStatus());
+//        return new ResponseEntity<>(errorResponse,ex.getStatus());
+//    }
+//
+//    @ExceptionHandler(CustomException.class)
+//    public ResponseEntity<ErrorResponse>handleCustomExceptionException(CustomException ex){
+//        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),ex.getStatus());
+//        return new ResponseEntity<>(errorResponse,ex.getStatus());
+//    }
+//
+//    @ExceptionHandler(BadRequestException.class)
+//    public ResponseEntity<ErrorResponse>handleBadRequestException(BadRequestException ex){
+//        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(),ex.getStatus());
+//        return new ResponseEntity<>(errorResponse,ex.getStatus());
+//    }
 }

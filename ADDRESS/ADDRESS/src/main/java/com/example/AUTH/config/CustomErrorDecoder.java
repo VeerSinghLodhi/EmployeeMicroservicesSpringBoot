@@ -1,14 +1,15 @@
 package com.example.AUTH.config;
 
 
-import com.example.AUTH.exception.CustomException;
-import com.example.AUTH.exception.ErrorResponse;
+
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import com.commonlib.exception.CustomException;
+import com.commonlib.exception.ErrorResponse;
 
 
 public class CustomErrorDecoder implements ErrorDecoder{

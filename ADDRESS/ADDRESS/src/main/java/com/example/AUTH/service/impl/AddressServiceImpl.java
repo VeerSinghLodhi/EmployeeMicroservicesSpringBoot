@@ -5,15 +5,17 @@ import com.example.AUTH.dto.AddressDto;
 import com.example.AUTH.dto.AddressRequest;
 import com.example.AUTH.dto.AddressRequestDto;
 import com.example.AUTH.entity.Address;
-import com.example.AUTH.exception.BadRequestException;
-import com.example.AUTH.exception.ResourceNotFoundException;
+import com.commonlib.exception.BadRequestException;
+import com.commonlib.exception.ResourceNotFoundException;
 import com.example.AUTH.mapper.AddressMapper;
 import com.example.AUTH.repository.AddressRepository;
 import com.example.AUTH.service.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +95,11 @@ public class AddressServiceImpl implements AddressService {
         for(AddressRequestDto addressRequestDto : addressRequest.getAddressRequestDtoList()){
             Address address = new Address();
             address.setId(addressRequestDto.getId() != null ? addressRequestDto.getId() : null);
+            // When address is creating at first time
+            if(addressRequestDto.getId() == null){
+                address.setCreatedAt(LocalDateTime.now());
+            }
+            address.setUpdatedAt(addressRequestDto.getId() != null ? LocalDateTime.now() : null);
             address.setStreet(addressRequestDto.getStreet());
             address.setPicCode(addressRequestDto.getPicCode());
             address.setCity(addressRequestDto.getCity());

@@ -1,19 +1,23 @@
 package com.example.AUTH.service.impl;
 
+import com.commonlib.exception.ResourceNotFoundException;
 import com.example.AUTH.client.AddressClient;
 import com.example.AUTH.dto.AddressDto;
 import com.example.AUTH.dto.EmployeeDto;
 import com.example.AUTH.dto.EmployeeRequest;
 import com.example.AUTH.entity.Employee;
-import com.example.AUTH.exception.BadRequestException;
-import com.example.AUTH.exception.ResourceNotFoundException;
+//import com.example.AUTH.exception.BadRequestException;
+//import com.example.AUTH.exception.ResourceNotFoundException;
+import com.commonlib.exception.BadRequestException;
 import com.example.AUTH.mapper.EmployeeMapper;
 import com.example.AUTH.repository.EmployeeRepository;
 import com.example.AUTH.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto addEmployee(EmployeeRequest request) {
         Employee employee= EmployeeMapper.toEntity(request);
+        employee.setCreatedAt(LocalDateTime.now());
         EmployeeDto savedEmp = EmployeeMapper.toDto(employeeRepository.save(employee));
         return savedEmp;
     }
@@ -67,6 +72,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(
                 ()->new ResourceNotFoundException("Employee not found with id: "+id)
         );
+        employee.setUpdatedAt(LocalDateTime.now());
         employee.setEmpName(updateRequest.getEmpName());
         employee.setEmpCode(updateRequest.getEmpCode());
         employee.setEmpPhone(updateRequest.getEmpPhone());

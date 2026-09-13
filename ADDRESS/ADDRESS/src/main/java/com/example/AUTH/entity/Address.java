@@ -1,10 +1,11 @@
 package com.example.AUTH.entity;
 
+import com.commonlib.entity.AuditableEntity;
 import com.example.AUTH.enums.AddressType;
 import jakarta.persistence.*;
 
 @Entity(name = "addresses")
-public class Address {
+public class Address extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
