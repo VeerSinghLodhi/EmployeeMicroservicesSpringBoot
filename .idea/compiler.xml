@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="EUREKA-SERVER" />
         <module name="API-GATEWAY" />
+        <module name="common-lib" />
         <module name="AUTH" />
         <module name="EMPLOYEE" />
         <module name="ADDRESS" />
