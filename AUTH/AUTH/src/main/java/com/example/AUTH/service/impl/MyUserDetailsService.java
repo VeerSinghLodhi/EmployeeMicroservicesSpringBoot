@@ -1,7 +1,7 @@
 package com.example.AUTH.service.impl;
 
 import com.example.AUTH.entity.User;
-import com.example.AUTH.exception.ResourceNotFoundException;
+import com.commonlib.exception.ResourceNotFoundException;
 import com.example.AUTH.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

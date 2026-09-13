@@ -4,7 +4,7 @@ package com.example.AUTH.controller;
 import com.example.AUTH.dto.JwtTokenResponse;
 import com.example.AUTH.dto.LoginRequest;
 import com.example.AUTH.dto.UserDto;
-import com.example.AUTH.exception.ResourceNotFoundException;
+import com.commonlib.exception.ResourceNotFoundException;
 import com.example.AUTH.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
